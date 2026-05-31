@@ -44,7 +44,7 @@ The MVP will not include login, registration, payment, complex job recommendatio
 ```text
 ai-resume-review/
 |-- backend/                  # Spring Boot backend
-|-- deployment/               # Docker Compose config, future Nginx config
+|-- deployment/               # Docker Compose and Nginx config
 |-- docs/                     # Project documents
 |   |-- 01_project_vision.md
 |   |-- 02_requirements.md
@@ -117,7 +117,7 @@ Planned deployment work includes:
 
 ## Local Docker Startup
 
-The project currently provides separate Dockerfiles for backend and frontend, plus a local Docker Compose file under `deployment/`.
+The project currently provides separate Dockerfiles for backend and frontend, plus Docker Compose and Nginx configuration under `deployment/`.
 
 Start both services with Docker Compose:
 
@@ -126,10 +126,15 @@ cd deployment
 docker compose up -d --build
 ```
 
-After startup:
+After startup, access the app through Nginx:
 
-- Frontend: `http://localhost:3000`
-- Backend health check: `http://localhost:8080/api/health`
+- Frontend: `http://localhost`
+- Backend health check through Nginx: `http://localhost/api/health`
+
+The Compose file also publishes direct service ports for local debugging:
+
+- Frontend direct port: `http://localhost:3000`
+- Backend direct port: `http://localhost:8080/api/health`
 
 View running containers:
 
@@ -143,7 +148,7 @@ Stop local containers:
 docker compose down
 ```
 
-Docker Compose and Dockerfiles currently cover local container startup. Nginx integration will be added later.
+Nginx listens on port `80`, proxies `/` to `frontend:3000`, and proxies `/api/` to `backend:8080`.
 
 ## Docker Build
 

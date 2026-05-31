@@ -14,9 +14,23 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     image: ai-resume-review-frontend:local
+    environment:
+      BACKEND_API_URL: http://backend:8080
     ports:
       - "3000:3000"
     depends_on:
+      - backend
+    networks:
+      - ai-resume-review-network
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
       - backend
     networks:
       - ai-resume-review-network

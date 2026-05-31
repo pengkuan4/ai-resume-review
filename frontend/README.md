@@ -91,7 +91,15 @@ The initial homepage includes:
 When the user clicks the diagnosis button, the frontend sends a `multipart/form-data` request to:
 
 ```text
-POST http://localhost:8080/api/resume/analyze
+POST /api/resume/analyze
 ```
 
 The uploaded file field name is `file`.
+
+In Docker Compose deployment, Nginx proxies `/api/` requests to the backend service. When running the frontend directly with `npm run dev`, `next.config.ts` can rewrite `/api/*` requests to the backend service.
+
+The rewrite target can be overridden with:
+
+```bash
+BACKEND_API_URL=http://localhost:8080
+```

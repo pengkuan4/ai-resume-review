@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useMemo, useState } from "react";
 
-const ANALYZE_ENDPOINT = "http://localhost:8080/api/resume/analyze";
+const ANALYZE_ENDPOINT = "/api/resume/analyze";
 
 type ResumeAnalysisResult = {
   score: number;
@@ -201,7 +201,7 @@ async function getErrorMessage(response: Response) {
 
 function getFriendlyErrorMessage(error: unknown) {
   if (error instanceof TypeError) {
-    return "无法连接后端接口，请确认 Spring Boot 服务已在 http://localhost:8080 启动，并允许前端访问。";
+    return "无法连接后端接口，请确认服务已启动。Docker 部署请访问 http://localhost，本地开发请确认 Spring Boot 后端已运行。";
   }
 
   if (error instanceof Error) {

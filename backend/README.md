@@ -2,7 +2,7 @@
 
 This directory contains the Spring Boot backend for AI Resume Review.
 
-Current status: initial backend skeleton only. It provides a health check API and a mock resume analysis API. It does not include database integration, PDF text parsing, or real AI service integration yet.
+Current status: initial backend skeleton with a health check API and a resume analysis API. The resume API extracts text from uploaded PDF files and returns a mock diagnosis result through an AI diagnosis service abstraction. It does not include database integration or real AI service integration yet.
 
 ## Requirements
 
@@ -49,9 +49,13 @@ Current behavior:
 - Rejects empty files.
 - Rejects non-PDF files.
 - Checks basic PDF metadata and the `%PDF-` file header.
-- Does not parse PDF text yet.
-- Does not call a real AI service yet.
-- Returns a mock diagnosis result containing `score`, `summary`, `problems`, `suggestions`, and `jobFit`.
+- Extracts PDF text with Apache PDFBox.
+- Returns `extractedTextPreview` with the first 500 characters of extracted text.
+- Uses `ResumeDiagnosisService` as the AI diagnosis abstraction.
+- Uses `MockResumeDiagnosisService` as the current implementation.
+- Does not call a real AI service or require an API key yet.
+- Returns a mock diagnosis result containing `score`, `summary`, `extractedTextPreview`, `problems`, `suggestions`, and `jobFit`.
+- Returns a clear error if PDF text parsing fails.
 
 Example response:
 
@@ -59,6 +63,7 @@ Example response:
 {
   "score": 72,
   "summary": "This is a mock resume diagnosis result.",
+  "extractedTextPreview": "First 500 characters of extracted PDF text...",
   "problems": [],
   "suggestions": [],
   "jobFit": {
