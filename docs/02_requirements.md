@@ -1,56 +1,97 @@
-# Requirements
+# 需求说明
 
-## MVP Features
+本文档描述 AI Resume Review 的 MVP 需求。当前项目仍处于早期阶段，以下内容是开发目标和验收依据，不代表功能已经实现。
 
-### Resume Upload
+## 1. 功能需求表
 
-- Users can upload a PDF resume from the frontend.
-- The system should reject unsupported file types.
-- The system should provide a clear error message when upload or parsing fails.
+| 编号 | 功能模块 | 功能说明 | 优先级 | MVP 验收点 |
+| --- | --- | --- | --- | --- |
+| FR-001 | PDF 简历上传 | 用户可以在前端页面选择并上传 PDF 简历文件 | P0 | 能选择 PDF 文件并发起上传请求 |
+| FR-002 | 文件格式校验 | 系统只接受 PDF 文件，拒绝其他格式 | P0 | 上传非 PDF 文件时给出明确错误提示 |
+| FR-003 | 文件大小限制 | 后端限制上传文件大小，避免异常大文件影响服务 | P0 | 超过限制时返回可理解的错误信息 |
+| FR-004 | PDF 文本解析 | 后端从上传的 PDF 中提取文本内容 | P0 | 能从常见文本型 PDF 简历中提取正文 |
+| FR-005 | 解析失败处理 | 当 PDF 无法解析或文本为空时，系统返回失败原因 | P0 | 前端能展示解析失败提示 |
+| FR-006 | AI 简历诊断 | 后端将解析后的简历文本提交给 AI 诊断流程 | P0 | 能获得一份与简历内容相关的诊断结果 |
+| FR-007 | 诊断报告结构化 | AI 输出应包含总体评价、主要问题、优势和修改建议 | P0 | 前端能按模块展示报告内容 |
+| FR-008 | 前端报告展示 | 前端展示 AI 诊断结果 | P0 | 用户上传后能在页面看到诊断报告 |
+| FR-009 | 加载状态提示 | 分析过程中前端展示处理中状态 | P1 | 用户能知道系统正在处理请求 |
+| FR-010 | 错误状态提示 | 上传、解析或 AI 调用失败时，前端展示错误信息 | P1 | 常见失败场景不会只显示空白页面 |
+| FR-011 | 示例材料管理 | `samples/` 目录保存测试用简历样例或说明 | P2 | 开发阶段可以使用样例进行手动测试 |
+| FR-012 | Prompt 管理 | `prompts/` 目录保存 AI 诊断提示词版本 | P2 | Prompt 不直接散落在文档或说明中 |
 
-### PDF Text Parsing
+优先级说明：
 
-- The backend extracts text from the uploaded PDF.
-- The extracted text is used only for diagnosis in the MVP.
-- The initial version does not need to preserve the original PDF layout.
+- P0：MVP 必须实现。
+- P1：强烈建议在 MVP 中实现，用于保证基本体验。
+- P2：辅助开发和后续迭代，可根据进度安排。
 
-### AI Diagnosis
+## 2. 非功能需求
 
-- The backend sends parsed resume text to an AI model using a controlled prompt.
-- The AI response should be structured enough for the frontend to display as a report.
-- The diagnosis should focus on computer science new graduate resumes.
+### 可运行性
 
-### Report Output
+- 项目应支持本地开发环境运行。
+- 前端和后端应能独立启动。
+- 后续应支持通过 Docker Compose 统一启动。
 
-- The frontend displays the diagnosis result after analysis completes.
-- The report should include strengths, problems, improvement suggestions, and an overall score or summary.
-- The first version can display the report on the page without saving history.
+### 可维护性
 
-## Non-Goals
+- 前端使用 Next.js，后端使用 Spring Boot。
+- 前后端职责清晰分离。
+- AI 诊断 Prompt 应便于版本管理和后续调整。
+- 配置项应通过环境变量管理，避免硬编码密钥。
 
-The MVP will not include:
+### 易用性
 
-- login or registration
-- paid plans
-- resume template editing
-- complex role matching
-- long-term report storage
-- admin dashboard
+- 上传入口应清晰。
+- 错误信息应尽量让用户知道下一步怎么处理。
+- 诊断报告应分模块展示，避免大段难读文本。
 
-## Basic Quality Requirements
+### 安全性
 
-- The project should be runnable locally.
-- The project should support Docker Compose deployment later.
-- Frontend and backend responsibilities should remain clearly separated.
-- Sensitive configuration should be placed in environment variables, not hardcoded.
+- 限制上传文件类型和文件大小。
+- 不在代码中提交 AI API Key、服务器密码或其他敏感信息。
+- MVP 阶段不保存用户简历历史，降低隐私和数据管理复杂度。
 
-## Future Considerations
+### 运维友好性
 
-Potential later features include:
+- 后续应提供 Docker Compose 和 Nginx 配置。
+- 后端应提供健康检查接口。
+- 服务日志应便于排查上传、解析和 AI 调用问题。
 
-- report export
-- historical diagnosis records
-- job description based comparison
-- operations dashboard
-- CI/CD pipeline
-- monitoring and logging
+## 3. 用户流程
+
+MVP 用户流程如下：
+
+1. 用户进入 AI Resume Review 网站首页。
+2. 用户选择本地 PDF 简历文件。
+3. 前端校验文件基础信息，并提交给后端。
+4. 后端接收文件，校验格式和大小。
+5. 后端解析 PDF 文本。
+6. 后端将解析后的文本发送给 AI 诊断流程。
+7. AI 返回结构化诊断结果。
+8. 后端将诊断结果返回前端。
+9. 前端展示诊断报告。
+10. 用户根据报告修改自己的简历。
+
+异常流程：
+
+- 如果文件不是 PDF，前端或后端应提示文件格式不支持。
+- 如果 PDF 无法解析，系统应提示用户更换可复制文本的 PDF 简历。
+- 如果 AI 服务调用失败，系统应提示稍后重试。
+- 如果请求超时，系统应返回明确失败状态，而不是一直加载。
+
+## 4. MVP 验收标准
+
+MVP 完成时，应满足以下验收标准：
+
+- 可以在本地启动前端 Next.js 项目。
+- 可以在本地启动后端 Spring Boot 项目。
+- 用户可以通过前端上传 PDF 简历。
+- 后端可以接收上传文件并完成基础校验。
+- 后端可以从常见文本型 PDF 简历中提取文本。
+- 后端可以调用 AI 诊断流程并获得结果。
+- 前端可以展示结构化诊断报告。
+- 上传失败、解析失败、AI 调用失败时有基本错误提示。
+- 项目文档说明如何本地运行。
+- 项目没有引入登录、支付、复杂推荐等超出 MVP 的功能。
+

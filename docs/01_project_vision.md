@@ -1,44 +1,67 @@
-# Project Vision
+# 项目愿景
 
-## Project Goal
+## 1. 项目背景
 
-AI Resume Review aims to provide an AI resume diagnosis website for computer science students and new graduates who are preparing for software development, operations, DevOps, testing, data, or other technical entry-level roles.
+AI Resume Review 是一个面向计算机相关专业应届生的 AI 简历诊断网站。
 
-The project should feel close to a real production website, while remaining small enough to support fast iteration and operations practice.
+很多计算机应届生在求职前会反复修改简历，但常见问题是缺少可靠反馈来源：同学和朋友的建议可能不够系统，网上模板又无法结合个人经历判断简历质量。尤其是技术类岗位，简历不仅要说明做过什么，还要体现技术栈、项目价值、工程能力和表达清晰度。
 
-## Target Users
+本项目希望通过一个接近真实业务形态的网站，完成从“上传 PDF 简历”到“生成 AI 诊断报告”的完整流程。同时，该项目也会作为后续运维实践对象，用于练习部署、Nginx、Docker Compose、日志、监控、CI/CD 等能力。
 
-- Computer science students preparing for internships or full-time jobs.
-- New graduates who need feedback on technical resumes.
-- Learners who want to understand how their resume matches technical hiring expectations.
+## 2. 用户痛点
 
-## Core Value
+- 不知道简历是否符合计算机应届生岗位的基本要求。
+- 项目经历描述过于口语化，缺少技术重点和结果表达。
+- 技术关键词堆砌，但无法体现实际应用能力。
+- 简历结构混乱，重点不突出，HR 或面试官难以快速阅读。
+- 缺少针对技术岗位的具体修改建议。
+- 不方便频繁找人帮忙审查简历。
 
-The website helps users quickly identify resume problems, including:
+## 3. 目标用户
 
-- unclear project descriptions
-- weak technical keywords
-- missing measurable outcomes
-- poor structure or readability
-- mismatch between resume content and technical job expectations
+本项目的早期目标用户主要包括：
 
-## MVP Direction
+- 计算机相关专业本科或专科应届生。
+- 正在准备实习、校招或初级岗位求职的学生。
+- 目标岗位包括开发、运维、DevOps、测试、数据分析等技术类岗位的求职者。
+- 想快速了解自己简历问题，并获得结构化修改建议的学习者。
 
-The MVP should focus on one complete workflow:
+## 4. 核心价值
 
-1. The user uploads a PDF resume.
-2. The backend extracts text from the PDF.
-3. The backend sends the resume text to an AI diagnosis prompt.
-4. The frontend displays a structured diagnosis report.
+AI Resume Review 的核心价值是帮助用户快速获得一份结构化、可执行的简历诊断报告。
 
-## Product Boundaries
+MVP 阶段重点提供以下价值：
 
-The early version will not include:
+- 快速识别简历中的明显问题。
+- 从技术岗位视角分析项目经历、技能描述和整体表达。
+- 给出清晰的修改建议，而不是只给笼统评价。
+- 帮助用户理解“为什么这份简历看起来不够有竞争力”。
+- 为后续真实部署和运维实践提供一个完整 Web 项目。
 
-- user registration or login
-- payment features
-- complex job recommendation
-- resume editing inside the website
-- enterprise account management
+## 5. MVP 边界
 
-These features may be considered only after the MVP is stable.
+MVP 只聚焦一条最小可用流程：
+
+1. 用户上传 PDF 格式简历。
+2. 后端解析 PDF 文本内容。
+3. 后端将简历文本交给 AI 诊断流程。
+4. AI 返回结构化诊断结果。
+5. 前端展示诊断报告。
+
+MVP 阶段只关注“简历诊断”本身，不追求复杂账号体系、商业化功能或大规模数据分析。
+
+## 6. 暂不实现的功能
+
+以下功能暂不纳入 MVP：
+
+- 用户注册、登录和个人中心。
+- 简历历史记录长期保存。
+- 支付、会员、套餐等商业化能力。
+- 在线编辑简历模板。
+- 根据岗位自动投递或推荐岗位。
+- 复杂岗位匹配系统。
+- 企业端、管理员后台或多租户系统。
+- 多格式简历深度排版还原。
+- 大规模并发和复杂权限管理。
+
+这些功能可以在 MVP 稳定后，根据实际学习和运维实践需要逐步评估。
