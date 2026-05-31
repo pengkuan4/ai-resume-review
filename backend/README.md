@@ -76,3 +76,23 @@ Run backend tests:
 ```bash
 mvn test
 ```
+
+## Docker
+
+Build the backend image from the repository root:
+
+```bash
+docker build -t ai-resume-review-backend ./backend
+```
+
+Run the backend container:
+
+```bash
+docker run --rm -p 8080:8080 ai-resume-review-backend
+```
+
+Then test the health endpoint:
+
+```bash
+curl http://localhost:8080/api/health
+```

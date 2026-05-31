@@ -2,6 +2,7 @@ package com.airesumereview.backend.resume;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,5 +88,21 @@ class ResumeAnalyzeControllerTest {
         mockMvc.perform(multipart("/api/resume/analyze").file(file))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_PDF_FILE"));
+    }
+
+    @Test
+    void shouldAllowLocalFrontendOrigin() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "resume.pdf",
+                "application/pdf",
+                "%PDF-1.4 mock pdf content".getBytes()
+        );
+
+        mockMvc.perform(multipart("/api/resume/analyze")
+                        .file(file)
+                        .header("Origin", "http://localhost:3000"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:3000"));
     }
 }

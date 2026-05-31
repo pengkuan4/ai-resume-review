@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: ai-resume-review-backend:local
+    ports:
+      - "8080:8080"
+    networks:
+      - ai-resume-review-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: ai-resume-review-frontend:local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - ai-resume-review-network
+
+networks:
+  ai-resume-review-network:
+    driver: bridge

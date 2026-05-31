@@ -2,7 +2,7 @@
 
 AI Resume Review is an AI-powered resume diagnosis website for computer science students and new graduates.
 
-The project is currently in an early planning and repository initialization stage. The current repository contains documentation and base directories only. Frontend and backend business code has not been implemented yet.
+The project is currently in an early MVP development stage. The repository contains project documentation, a Spring Boot backend skeleton, and a Next.js frontend skeleton.
 
 ## Project Introduction
 
@@ -43,14 +43,14 @@ The MVP will not include login, registration, payment, complex job recommendatio
 
 ```text
 ai-resume-review/
-|-- backend/                  # Planned Spring Boot backend
-|-- deployment/               # Planned Docker Compose and Nginx config
+|-- backend/                  # Spring Boot backend
+|-- deployment/               # Docker Compose config, future Nginx config
 |-- docs/                     # Project documents
 |   |-- 01_project_vision.md
 |   |-- 02_requirements.md
 |   |-- 03_architecture.md
 |   `-- 04_development_plan.md
-|-- frontend/                 # Planned Next.js frontend
+|-- frontend/                 # Next.js frontend
 |-- prompts/                  # Planned AI prompt templates
 |-- research/                 # Research notes and references
 |-- samples/                  # Sample resumes and test materials
@@ -115,3 +115,58 @@ Planned deployment work includes:
 - Prepare deployment documentation under `deployment/` or `docs/`.
 - Later add CI/CD, logging, monitoring, and backup practice.
 
+## Local Docker Startup
+
+The project currently provides separate Dockerfiles for backend and frontend, plus a local Docker Compose file under `deployment/`.
+
+Start both services with Docker Compose:
+
+```bash
+cd deployment
+docker compose up -d --build
+```
+
+After startup:
+
+- Frontend: `http://localhost:3000`
+- Backend health check: `http://localhost:8080/api/health`
+
+View running containers:
+
+```bash
+docker compose ps
+```
+
+Stop local containers:
+
+```bash
+docker compose down
+```
+
+Docker Compose and Dockerfiles currently cover local container startup. Nginx integration will be added later.
+
+## Docker Build
+
+Build the backend image:
+
+```bash
+docker build -t ai-resume-review-backend ./backend
+```
+
+Run the backend container:
+
+```bash
+docker run --rm -p 8080:8080 ai-resume-review-backend
+```
+
+Build the frontend image:
+
+```bash
+docker build -t ai-resume-review-frontend ./frontend
+```
+
+Run the frontend container:
+
+```bash
+docker run --rm -p 3000:3000 ai-resume-review-frontend
+```
