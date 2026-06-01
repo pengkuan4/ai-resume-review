@@ -1,11 +1,36 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ai_resume_review
+      POSTGRES_USER: ai_resume_review
+      POSTGRES_PASSWORD: ai_resume_review
+    expose:
+      - "5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ai_resume_review -d ai_resume_review"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-resume-review-network
+
   backend:
     build:
       context: ../backend
       dockerfile: Dockerfile
     image: ai-resume-review-backend:local
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ai_resume_review
+      SPRING_DATASOURCE_USERNAME: ai_resume_review
+      SPRING_DATASOURCE_PASSWORD: ai_resume_review
     expose:
       - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - ai-resume-review-network
 
@@ -38,3 +63,6 @@ services:
 networks:
   ai-resume-review-network:
     driver: bridge
+
+volumes:
+  postgres-data:
