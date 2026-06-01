@@ -4,8 +4,8 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     image: ai-resume-review-backend:local
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     networks:
       - ai-resume-review-network
 
@@ -16,8 +16,8 @@ services:
     image: ai-resume-review-frontend:local
     environment:
       BACKEND_API_URL: http://backend:8080
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - backend
     networks:
