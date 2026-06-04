@@ -65,9 +65,25 @@ services:
     networks:
       - ai-resume-review-network
 
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    depends_on:
+      - backend
+    networks:
+      - ai-resume-review-network
+
 networks:
   ai-resume-review-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  prometheus-data:
